@@ -24,3 +24,15 @@ trades within ₹0.50) and that `data.js` is the latest window of the thesis dat
 Open `index.html` in a browser to use it locally. Months added on the page are kept in that browser only.
 
 Educational output from a back-test model, not investment advice.
+
+## Public site
+
+Hosted with GitHub Pages from the separate public repo `mainak2929/personal-sip-planner`
+(https://mainak2929.github.io/personal-sip-planner/). To update it after changing the page or data:
+
+```bash
+python website/build.py
+python website/export_site.py ../personal-sip-planner    # writes a full HTML page + sip.js + data.js
+```
+
+then commit and push that repo.
