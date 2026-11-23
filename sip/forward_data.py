@@ -85,3 +85,24 @@ def read_combined() -> pd.DataFrame:
     df = pd.read_csv(COMBINED_FILE, index_col="Month")
     df.index = pd.PeriodIndex(df.index, freq="M")
     return df
+
+
+# --------------------------------------------------------------------------- after the thesis period
+LIVE_FILE = RAW / "amfi_month_end_nav_2026_live.csv"     # month-end NAVs Dec 2025 onwards
+
+
+def live_returns() -> pd.DataFrame:
+    """Monthly returns from Jan 2026 to the latest month in LIVE_FILE, built exactly like the
+    2020-2025 table (average of the PRIMARY funds, splits undone). Not used by any back-test:
+    only by the investor tool and the website, so a plan can be made for the current month."""
+    nav = pd.read_csv(LIVE_FILE, index_col="Month")
+    nav.index = pd.PeriodIndex(nav.index, freq="M")
+    r = nav.astype(float).pct_change(fill_method=None).apply(_undo_splits).loc["2026-01":]
+    out = pd.DataFrame({a: r[c].mean(axis=1) for a, c in PRIMARY.items()})[["Nifty", "Gold", "Liquid"]]
+    out.index.name = "Month"
+    return out
+
+
+def read_latest() -> pd.DataFrame:
+    """The thesis table (Feb 2000 - Dec 2025) followed by the live months of 2026."""
+    return pd.concat([read_combined(), live_returns()])

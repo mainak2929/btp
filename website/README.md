@@ -14,7 +14,7 @@ that produced it.
 |---|---|
 | `index.html` | the page |
 | `sip.js` | the engine in JavaScript: target (½ risk parity + ½ max Sharpe, cushion by risk level), smart split, 5% band |
-| `data.js` | generated: the latest 120 months of returns (Jan 2016 – Dec 2025), the frozen cushions, the 2020–2025 test results |
+| `data.js` | generated: the latest 120 months of returns (Nov 2016 – Oct 2026: the thesis table, then 2026 fund NAVs), the frozen cushions, the 2020–2025 test results |
 | `build.py` | builds `data.js` and `reference.json` from the thesis data |
 | `reference.json` | the same targets and trades computed by the Python engine |
 

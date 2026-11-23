@@ -101,7 +101,7 @@ python -m pytest -q          # automated checks
 ```
 
 `python 09_investor_tool/invest.py --amount 10000 --holdings NIFTY GOLD LIQUID --risk moderate` prints this
-month's split for an investor today (data to Dec 2025). See [`09_investor_tool/`](09_investor_tool).
+month's split for an investor today (data to Oct 2026, so it plans the Nov 2026 instalment). See [`09_investor_tool/`](09_investor_tool).
 
 ## Architecture
 

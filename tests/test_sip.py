@@ -309,10 +309,10 @@ def test_personal_sip_target_has_the_chosen_cushion_and_no_look_ahead():
 
 def test_website_data_is_the_latest_window():
     import json
-    from sip.forward_data import read_combined
+    from sip.forward_data import read_latest
     txt = (ROOT / "website" / "data.js").read_text(encoding="utf-8")
     data = json.loads(txt[txt.index("{"):txt.rindex("}") + 1])
-    win = read_combined().iloc[-120:]
+    win = read_latest().iloc[-120:]
     assert data["months"] == [str(m) for m in win.index]
     np.testing.assert_allclose(np.array(data["returns"]), win[["Nifty", "Gold", "Liquid"]].values, atol=1e-8)
 

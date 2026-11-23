@@ -5,7 +5,7 @@
 > **with its rules unchanged**, on Jan 2020 – Dec 2025. Those six years played no part in
 > building any rule, so this is an *out-of-sample* test. A fixed version of the optimiser is
 > added, and the folder ends with what an investor starting on **1 Jan 2026** could expect,
-> plus a live check of what actually happened in Jan–Sep 2026.
+> plus a live check of what actually happened in Jan–Oct 2026.
 
 ```
 raw/ (AMFI fund NAVs, FRED USD/INR, World Bank gold, Nifty closes, RBI T-bills)
@@ -138,26 +138,32 @@ A 100% Liquid SIP earned 6.2%.
 No equal-weight or fixed-optimiser SIP of 3, 5 or 10 years in this history ever lost money.
 100% Nifty earned the most in the typical case but had losing 3- and 5-year windows.
 
-**Live check, Jan–Sep 2026** (published after the data cut-off, never used for any choice).
-Nifty fell (−11.3% in March, −6.1% in September). Gold jumped +23.5% in January and then
-swung. With ₹90,000 paid in, by 30 Sep 2026:
+**Live check, Jan–Oct 2026** (published after the data cut-off, never used for any choice;
+cross-checked in [`verification_2026.md`](verification_2026.md)). Nifty fell (−11.3% in March,
+−6.1% in September). Gold jumped +23.5% in January and then swung (−9.6% in June, −5.2% in
+October). With ₹1,00,000 paid in, by the end of October 2026:
 
 | Strategy | Value | Profit |
 |---|---|---|
-| Optimized (≈70% Liquid) | ₹90,810 | +₹810 (+0.9%) |
-| Equal-weight | ₹88,479 | −₹1,521 (−1.7%) |
-| Fixed Optimized | ₹87,532 | −₹2,468 (−2.7%) |
-| 60/20/20 | ₹86,774 | −₹3,226 (−3.6%) |
-| 100% Nifty | ₹84,216 | −₹5,784 (−6.4%) |
+| Optimized (≈70% Liquid) | ₹1,00,546 | +₹546 (+0.5%) |
+| Equal-weight | ₹97,503 | −₹2,497 (−2.5%) |
+| 60/20/20 | ₹96,913 | −₹3,087 (−3.1%) |
+| 100% Nifty | ₹96,027 | −₹3,973 (−4.0%) |
+| Fixed Optimized | ₹95,748 | −₹4,252 (−4.3%) |
 
-Nine months is far too short to judge a SIP; the 3- to 10-year tables above are the meaningful
+Ten months is far too short to judge a SIP; the 3- to 10-year tables above are the meaningful
 guide. It does show the trade-off clearly. In a falling market the cautious, cash-heavy mix
-loses least, the diversified mixes lose a little, and 100% equity loses most.
+loses least. The gold-heavy Fixed Optimized SIP, the 2020–2025 winner, lost most once gold fell
+back in June and October.
+
+The same 2026 month-end prices let the investor tool (`09_investor_tool`) and the website plan the
+**November 2026** instalment.
 
 ## How to run
 
 ```bash
 python 08_forward_test/build_data.py           # 2020-2025 returns + joined 2000-2025 table
+python 08_forward_test/verify_live_2026.py     # cross-check the 2026 months
 python 08_forward_test/verify_data.py          # cross-checks -> verification.md
 python 08_forward_test/select_liquid_share.py  # chooses L on 2010-2019 only
 python 08_forward_test/run_forward.py          # out-of-sample results

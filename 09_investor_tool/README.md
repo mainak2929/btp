@@ -50,28 +50,28 @@ Today that is the **Fixed Optimized SIP** for all three profiles (see [`10_max_u
 
 ```
 Strategy : Fixed Optimized SIP (08): Liquid 10%, Nifty/Gold by ½ risk parity + ½ max Sharpe
-Plan for : Jan 2026 instalment of ₹10,000
-Data     : month-end returns up to Dec 2025; target fitted in Feb 2025 on the previous 120 months
+Chosen as: your choice (--strategy)
+Plan for : Nov 2026 instalment of ₹10,000
+Data     : month-end returns up to Oct 2026; target fitted in Feb 2026 on the previous 120 months
 
        Target You hold now Buy this month (₹) After buying
-Nifty   41.2%        42.6%                879        41.2%
-Gold    48.8%        46.8%              9,121        48.6%
+Nifty   39.8%        42.6%                  0        40.8%
+Gold    50.2%        46.8%             10,000        49.0%
 Liquid  10.0%        10.6%                  0        10.2%
 
-Rebalance: largest gap from target after buying is 0.2% (≤ 5%): no selling needed.
+Rebalance: largest gap from target after buying is 1.2% (≤ 5%): no selling needed.
 
 How to place it:
-  • buy ₹879 of a Nifty 50 index fund or ETF
-  • buy ₹9,121 of a gold ETF (or gold fund)
+  • buy ₹10,000 of a gold ETF (or gold fund)
 ```
 
 ## How it works
 
-These are the same functions the back-test used. The tool's Jan 2026 target is the one the
+These are the same functions the back-test used. The tool's target is the one the
 back-test would use (checked in `tests/`).
 
 ```
-month   = last data month + 1                                  (Jan 2026)
+month   = last data month + 1                                  (Nov 2026)
 target  = fitted in the most recent February on the 120 months before it
 buy     = pro-rata (w × amount)  or  smart split (fill gaps first)   ← sip/engine.py _smart_split
 if band rule and max |share − target| > 5%:  trade everything back to target
@@ -79,7 +79,7 @@ if band rule and max |share − target| > 5%:  trade everything back to target
 
 ## Planned refinements (next version / website)
 
-- Fetch the latest month's data automatically, so it plans the current month and not Jan 2026.
+- Fetch the latest month's data automatically (today the 2026 month-end NAVs are added by hand to `08_forward_test/raw/amfi_month_end_nav_2026_live.csv`).
 - A web page: enter your holdings, see the split, keep a history.
 - Taxes and exit loads when deciding whether to rebalance.
 

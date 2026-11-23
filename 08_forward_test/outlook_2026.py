@@ -6,7 +6,7 @@ Part 1, expectation (uses data to Dec 2025 only): every SIP of 3, 5 and 10 years
 started between Feb 2010 and Dec 2025, for each strategy. The spread of their outcomes is the
 honest answer to "what kind of profit could I look at": a typical case, a bad case, a good case.
 
-Part 2, live check (uses Jan-Sep 2026, published after the study's data cut-off and never used
+Part 2, live check (uses the 2026 months to date, published after the study's data cut-off and never used
 to build or choose anything): what actually happened to a ₹10,000/month SIP started in Jan 2026.
 """
 
@@ -25,7 +25,7 @@ sys.path.insert(0, str(HERE))
 from run_forward import all_strategies  # noqa: E402
 from sip import analysis  # noqa: E402
 from sip.engine import contribution_schedule, run_sip  # noqa: E402
-from sip.forward_data import PRIMARY, RAW, _undo_splits, read_combined  # noqa: E402
+from sip.forward_data import live_returns, read_combined  # noqa: E402
 from sip.report import AMOUNT, COST_BPS, LOOKBACK  # noqa: E402
 
 SHOW = ["Equal-weight SIP", "Fixed Optimized SIP", "60/20/20 annual rebal", "Equity SIP", "Optimized SIP"]
@@ -34,13 +34,6 @@ SHOW = ["Equal-weight SIP", "Fixed Optimized SIP", "60/20/20 annual rebal", "Equ
 def fv_from_xirr(x: float, n: int, amount: float = AMOUNT) -> float:
     """Value after n monthly instalments growing at XIRR x (instalments at month starts)."""
     return float(sum(amount * (1 + x) ** ((n - k) / 12) for k in range(n)))
-
-
-def live_returns() -> pd.DataFrame:
-    nav = pd.read_csv(RAW / "amfi_month_end_nav_2026_live.csv", index_col="Month")
-    nav.index = pd.PeriodIndex(nav.index, freq="M")
-    r = nav.astype(float).pct_change(fill_method=None).apply(_undo_splits).loc["2026-01":]
-    return pd.DataFrame({a: r[c].mean(axis=1) for a, c in PRIMARY.items()})[["Nifty", "Gold", "Liquid"]]
 
 
 def main():

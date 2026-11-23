@@ -34,7 +34,7 @@ For each horizon, every SIP of that length that fits inside Feb 2010 – Dec 202
 | Equity SIP | 4.6% | 13.9% | 16.4% | ₹1,519,142 | ₹2,482,928 | ₹2,829,373 | 0 of 72 |
 | Optimized SIP | 7.2% | 7.9% | 9.9% | ₹1,734,285 | ₹1,807,177 | ₹2,006,139 | 0 of 72 |
 
-## 2. Live check: what actually happened, Jan – Sep 2026
+## 2. Live check: what actually happened, Jan – Oct 2026
 
 Same funds as the 2020-2025 data, published after the study's cut-off. Nothing here was used to build or choose a strategy.
 
@@ -49,16 +49,17 @@ Same funds as the 2020-2025 data, published after the study's cut-off. Nothing h
 | Jul 2026 | +2.3% | +0.9% | +0.5% |
 | Aug 2026 | -1.2% | +8.8% | +0.5% |
 | Sep 2026 | -6.1% | -4.8% | +0.5% |
+| Oct 2026 | +1.9% | -5.2% | +0.5% |
 
-₹10,000 on the 1st of each month, Jan – Sep 2026 (₹90,000 paid in), value on 30 Sep 2026:
+₹10,000 on the 1st of each month, Jan – Oct 2026 (₹100,000 paid in), value on 31 Oct 2026:
 
 | Strategy | Value | Profit | Profit % of money paid in |
 |---|---|---|---|
-| Max-Sharpe SIP | ₹90,828 | +₹828 | +0.9% |
-| Optimized SIP | ₹90,810 | +₹810 | +0.9% |
-| Risk-parity SIP | ₹90,792 | +₹792 | +0.9% |
-| Equal-weight SIP | ₹88,479 | −₹1,521 | -1.7% |
-| Fixed Optimized SIP | ₹87,532 | −₹2,468 | -2.7% |
-| 60/20/20 annual rebal | ₹86,774 | −₹3,226 | -3.6% |
-| Equity SIP | ₹84,216 | −₹5,784 | -6.4% |
+| Risk-parity SIP | ₹100,563 | +₹563 | +0.6% |
+| Optimized SIP | ₹100,546 | +₹546 | +0.5% |
+| Max-Sharpe SIP | ₹100,529 | +₹529 | +0.5% |
+| Equal-weight SIP | ₹97,503 | −₹2,497 | -2.5% |
+| 60/20/20 annual rebal | ₹96,913 | −₹3,087 | -3.1% |
+| Equity SIP | ₹96,027 | −₹3,973 | -4.0% |
+| Fixed Optimized SIP | ₹95,748 | −₹4,252 | -4.3% |
 

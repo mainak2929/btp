@@ -12,8 +12,9 @@ on the out-of-sample years 2020-2025 (10_max_utility/results/winners.csv).
 --strategy overrides that choice.
 
 It applies exactly the rules that were back-tested in folders 01-06 and 08: the same target,
-the same way of splitting the instalment, the same rebalancing rule. The data currently ends
-in Dec 2025, so the plan is for the instalment after that (Jan 2026).
+the same way of splitting the instalment, the same rebalancing rule. The data is the thesis
+table (to Dec 2025) plus the 2026 month-end fund NAVs (08_forward_test/raw/
+amfi_month_end_nav_2026_live.csv, currently to Oct 2026), so the plan is for the next month (Nov 2026).
 
 First version: a command-line tool. It will later be refined into a website.
 Educational output from a back-test, not investment advice.
@@ -32,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from sip.engine import _smart_split  # noqa: E402
-from sip.forward_data import read_combined  # noqa: E402
+from sip.forward_data import read_latest  # noqa: E402
 from sip.optimize import max_sharpe, max_utility, optimized_cash_buffer, risk_parity  # noqa: E402
 
 ASSETS = ["Nifty", "Gold", "Liquid"]
@@ -98,7 +99,7 @@ def main():
                    help="use this strategy instead of the one chosen for your risk profile")
     args = p.parse_args()
 
-    rets = read_combined()
+    rets = read_latest()
     month = rets.index[-1] + 1                       # the instalment we are planning
     lam = RISK_LAMBDA[args.risk]
     key = args.strategy or strategy_for_risk(args.risk)

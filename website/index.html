@@ -207,7 +207,7 @@ footer { font-size: 12.5px; color: var(--muted); max-width: 80ch; }
   </div>
 
   <footer>
-    U = yearly return above the liquid fund − (λ/2) × (yearly volatility)². Funds used in the thesis: a Nifty 50 index fund, a gold ETF and a liquid fund. Data ends Dec 2025. A model built from past data, for a student project. It is not investment advice.
+    U = yearly return above the liquid fund − (λ/2) × (yearly volatility)². Data: the thesis back-test table to Dec 2025, then month-end prices of the same Nifty 50 index funds, gold ETFs and liquid funds up to <span id="data-end">the latest month</span>. A model built from past data, for a student project. It is not investment advice.
   </footer>
 </div>
 
@@ -277,6 +277,7 @@ footer { font-size: 12.5px; color: var(--muted); max-width: 80ch; }
     var ev = D.test2020_2025[p];
     $("ev-xirr").textContent = pct(ev.xirr); $("ev-worst").textContent = pct(ev.worst); $("ev-u").textContent = pct(ev.u, 2);
 
+    $("data-end").textContent = label(D.months[D.months.length - 1]);
     $("window-range").textContent = "Window now: " + label(s.months[0]) + " – " + label(last) + ".";
     $("add-label").textContent = label(planFor);
     $("added").innerHTML = added.map(function (a, i) {

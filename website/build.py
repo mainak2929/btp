@@ -3,7 +3,7 @@
     python website/build.py      -> website/data.js, website/reference.json
 
 data.js       : the latest 120 months of Nifty / Gold / Liquid returns (the rolling window the
-                site starts from), the frozen cushions, and the 2020-2025 test results per profile.
+                site starts from: the thesis table, then the 2026 months from fund NAVs), the frozen cushions, and the 2020-2025 test results per profile.
 reference.json: the targets and an example plan computed by the Python engine, so
                 tests/test_sip.py can check the site's JavaScript gives the same numbers.
 """
@@ -22,7 +22,7 @@ ROOT = HERE.parent
 sys.path.insert(0, str(ROOT))
 
 from sip.engine import _smart_split  # noqa: E402
-from sip.forward_data import read_combined  # noqa: E402
+from sip.forward_data import read_latest  # noqa: E402
 from sip.optimize import optimized_cash_buffer  # noqa: E402
 
 LOOKBACK, LO, HI = 120, 0.10, 0.70
@@ -40,10 +40,10 @@ def test_results() -> dict:
 
 
 def main():
-    R = read_combined()
+    R = read_latest()
     win = R.iloc[-LOOKBACK:]
     data = {
-        "source": "Thesis dataset (08_forward_test/monthly_returns_2000_2025.csv)",
+        "source": "Thesis dataset to Dec 2025, then month-end fund NAVs (AMFI)",
         "months": [str(m) for m in win.index],
         "returns": [[round(float(x), 8) for x in row] for row in win[["Nifty", "Gold", "Liquid"]].values],
         "cushions": CUSHIONS, "lambda": LAMBDA, "test2020_2025": test_results(),
