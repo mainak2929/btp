@@ -286,3 +286,53 @@ def test_tool_risk_profile_maps_to_a_strategy():
     for risk in tool.RISK_LAMBDA:
         key = tool.strategy_for_risk(risk)
         assert key == "max-utility" or key in tool.STRATEGIES
+
+
+# --------------------------------------------------------------------------- 11 personal SIP + website
+def test_personal_sip_cushions_follow_risk_aversion():
+    s8 = _load(ROOT / "11_personal_sip" / "strategy.py", "personal_sip")
+    c = s8.cushions()
+    assert c["aggressive"] <= c["moderate"] <= c["conservative"]
+    assert all(x in s8.CANDIDATE_CUSHIONS for x in c.values())
+
+
+def test_personal_sip_target_has_the_chosen_cushion_and_no_look_ahead():
+    from sip.forward_data import read_combined
+    s8 = _load(ROOT / "11_personal_sip" / "strategy.py", "personal_sip2")
+    R = read_combined()
+    w = s8.target(R.loc[:"2015-12"], 0.30)
+    w_full = s8.target(R, 0.30)
+    np.testing.assert_allclose(w.dropna().values, w_full.loc[w.dropna().index].values, atol=1e-9)
+    assert np.allclose(w.dropna()["Liquid"], 0.30)
+    assert (w.dropna()[["Nifty", "Gold"]] >= 0.10 - 1e-9).all().all()
+
+
+def test_website_data_is_the_latest_window():
+    import json
+    from sip.forward_data import read_combined
+    txt = (ROOT / "website" / "data.js").read_text(encoding="utf-8")
+    data = json.loads(txt[txt.index("{"):txt.rindex("}") + 1])
+    win = read_combined().iloc[-120:]
+    assert data["months"] == [str(m) for m in win.index]
+    np.testing.assert_allclose(np.array(data["returns"]), win[["Nifty", "Gold", "Liquid"]].values, atol=1e-8)
+
+
+def test_website_javascript_matches_python_engine():
+    import json
+    import shutil
+    import subprocess
+    if shutil.which("node") is None:
+        pytest.skip("node not installed")
+    site = ROOT / "website"
+    script = ("const fs=require('fs');const sip=require(process.argv[1]+'/sip.js');const window={};"
+              "eval(fs.readFileSync(process.argv[1]+'/data.js','utf8'));const ref=JSON.parse("
+              "fs.readFileSync(process.argv[1]+'/reference.json','utf8'));const out={};"
+              "for(const p in ref.targets){const t=sip.target(window.SIP_DATA.returns,window.SIP_DATA.cushions[p]);"
+              "out[p]={w:t.weights,trade:sip.plan(ref.example.holdings,ref.example.amount,t.weights).trade};}"
+              "console.log(JSON.stringify(out));")
+    js = json.loads(subprocess.run(["node", "-e", script, str(site)], capture_output=True, text=True,
+                                   check=True).stdout)
+    ref = json.loads((site / "reference.json").read_text(encoding="utf-8"))
+    for p in ref["targets"]:
+        np.testing.assert_allclose(js[p]["w"], ref["targets"][p], atol=1e-6)
+        np.testing.assert_allclose(js[p]["trade"], ref["plans"][p]["trade"], atol=0.5)   # within 50 paise

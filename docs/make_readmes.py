@@ -948,6 +948,8 @@ rule in `strategy.py`, and its own `results/`.**
 | [`08_forward_test/`](08_forward_test) | **Forward look:** data extended to Dec 2025 (cross-checked), all six + a **fixed optimiser** tested on 2020–2025, and what an investor starting in Jan 2026 could expect |
 | [`09_investor_tool/`](09_investor_tool) | **Investor tool:** this month's split for a real investor (first version, command line) |
 | [`10_max_utility/`](10_max_utility) | **One score for profit and risk:** mean-variance utility U = return above Liquid − (λ/2)·variance, Strategy 7 (Max-Utility SIP), and which approach maximises U for aggressive / moderate / conservative investors |
+| [`11_personal_sip/`](11_personal_sip) | **The end point (Strategy 8, Personal SIP):** the fixed optimiser with a Liquid safety cushion set by the investor's risk level (10% / 30% / 70%, chosen on 2010–2019), tested on 2020–2025 |
+| [`website/`](website) | **The website:** risk level + monthly amount + holdings → this month's split and rupee buys/sells (Strategy 8, in JavaScript, checked against the Python engine) |
 | [`sip/`](sip) | Shared engine used by all six: monthly SIP simulator, optimisers, scoring |
 | [`tests/`](tests) | Automated checks (formulas, no look-ahead, data integrity) |
 | [`docs/`](docs) | Architecture diagram and the 20-step worked example |
@@ -990,6 +992,18 @@ for aggressive (λ=2), moderate (λ=4) and conservative (λ=8) investors. Strate
 directly, came 2nd–3rd: optimising on noisy past returns does not guarantee the best realised U.
 The investor tool ([`09_investor_tool/`](09_investor_tool)) asks for the investor's risk profile and
 uses that winner.
+
+## The end point: Personal SIP and the website ([`11_personal_sip/`](11_personal_sip), [`website/`](website))
+
+The fixed optimiser gives everyone the same 10% cushion, so the risk answer does not change the advice.
+The Personal SIP (Strategy 8) keeps its Nifty/Gold split and sets the Liquid cushion from the
+investor's λ: aggressive 10%, moderate 30%, conservative 70% (each the highest-U cushion on 2010–2019,
+then frozen). The Nifty/Gold split is re-fitted every month on the latest 120 months.
+
+Tested on 2020–2025 it gave the bold investor almost the same result as the fixed optimiser (U 9.99%
+vs 10.25%) and the cautious investor a much smaller worst fall (−3.4% vs −12.2%), but a lower U for
+moderate and conservative investors: the cushions chosen on 2010–2019 were too cautious for the gold
+boom that followed. The website turns this rule into a monthly instruction.
 
 ## Run it
 

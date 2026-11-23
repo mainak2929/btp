@@ -25,6 +25,9 @@ STEPS = [
     ["08_forward_test/crosscheck.py"],
     ["08_forward_test/outlook_2026.py"],
     ["10_max_utility/run.py"],
+    ["11_personal_sip/select_cushion.py"],
+    ["11_personal_sip/run.py"],
+    ["website/build.py"],
     ["docs/make_readmes.py"],
 ]
 
