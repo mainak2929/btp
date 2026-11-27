@@ -109,7 +109,7 @@ A 100% Liquid SIP earned 6.2%.
   11.1%. The fixed version earned 20.3%.
 - **Big caveat: 2020–2025 was a gold boom.** Rupee gold rose 21%/yr, including +72% in 2025.
   Mixes that hold a lot of gold (equal-weight at ⅓, the fixed optimiser at 33–49%) benefited most.
-  In 2010–2019, when rupee gold rose only ~3%/yr, neither was the best: 60/20/20 led (Sharpe vs
+  In 2010–2019, when rupee gold rose about 8%/yr (about 3%/yr in dollars), neither was the best: 60/20/20 led (Sharpe vs
   Liquid 0.33), with the fixed optimiser 0.29 and equal-weight 0.28.
 
 ## 5. Cross-check of the results: [`results/crosscheck.md`](results/crosscheck.md)
