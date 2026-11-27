@@ -1,0 +1,68 @@
+\chapter{Introduction}
+\label{ch:intro}
+
+\section{Background}
+
+A \emph{Systematic Investment Plan} (SIP) is the most common way Indian retail investors buy
+mutual funds: a fixed amount, for example \Rs10{,}000, is invested on the same date every month.
+Most SIPs go into a single equity fund. Equity has the highest long-run return of the
+mainstream asset classes, but it also falls the hardest: the Nifty~50 lost about 24\% in 2011 and
+about 28\% during the COVID-19 crash of March 2020 (Chapter~\ref{ch:results}).
+
+Two other assets are easy for an Indian investor to hold through mutual funds and exchange-traded
+funds. \emph{Gold}, bought in rupees, has historically moved largely independently of Indian equities
+and often rises when the rupee falls \citep{baur2010}. A \emph{liquid fund} invests in very
+short-term government and money-market paper; it earns roughly the 91-day Treasury-bill rate and
+almost never falls in value. Holding all three should give a smoother ride than equity alone. The
+question is \emph{how much} of each month's instalment should go into each.
+
+\section{Problem statement}
+
+\begin{quote}
+\emph{Given a fixed monthly investment and the investor's tolerance for risk, how should each
+instalment be split between Nifty~50 equities, gold and a liquid fund, using only the data that
+would have been available at the time?}
+\end{quote}
+
+The answer must be usable by an ordinary investor every month, so the study ends not with a table
+of back-test results but with a tool that gives this month's instruction.
+
+\section{Objectives}
+
+\begin{enumerate}
+  \item Build a clean, verified table of monthly rupee returns for the three assets from
+        Feb~2000 to the latest available month (Chapter~\ref{ch:data}).
+  \item Build a monthly SIP simulation engine with realistic instalments, rebalancing and costs,
+        in which every decision uses only past data (Chapter~\ref{ch:method}).
+  \item Compare simple fixed mixes with optimiser-based strategies on 2010--2019, and test all of
+        them, unchanged, on 2020--2025 (Chapter~\ref{ch:results}).
+  \item Define one score that balances return against risk for a given investor, and use it to
+        choose between approaches (Sections~\ref{sec:utility} and \ref{sec:res-utility}).
+  \item Turn the final rule into a website that any investor can use each month
+        (Chapter~\ref{ch:website}).
+\end{enumerate}
+
+\section{Contributions}
+
+\begin{itemize}
+  \item A walk-forward back-test of eight SIP strategies on Indian data covering 2000--2026,
+        with each data source cross-checked against at least two independent references.
+  \item Evidence that standard optimisers (risk parity, maximum Sharpe) become almost entirely
+        cash when one of the assets is a liquid fund and risk is measured against a 0\% rate, and a
+        simple correction that treats the liquid fund as cash.
+  \item An out-of-sample comparison, on 2020--2025, of all strategies by mean-variance utility for
+        three investor profiles.
+  \item The \emph{Personal SIP}: a rule in which the investor's risk aversion sets a liquid
+        ``safety cushion'' and the rest is allocated by a blend of two optimisers.
+  \item A public, browser-based planner implementing that rule, verified against the back-test
+        engine by automated tests.
+\end{itemize}
+
+\section{Organisation of the report}
+
+Chapter~\ref{ch:lit} reviews the literature behind each idea used. Chapter~\ref{ch:data} explains
+how the monthly return table was built and checked. Chapter~\ref{ch:method} describes the SIP
+engine, the strategies, the utility score and the testing design. Chapter~\ref{ch:results} presents
+the results in and out of sample. Chapter~\ref{ch:website} describes the website and works through
+one complete monthly calculation with real numbers. Chapter~\ref{ch:conclusion} concludes and lists
+limitations and future work. The appendices collect the formulas and the core code.

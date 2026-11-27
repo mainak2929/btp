@@ -1,0 +1,279 @@
+\chapter{Methodology}
+\label{ch:method}
+
+\section{Overview}
+
+Figure~\ref{fig:pipeline} shows the whole pipeline. Each month, a strategy decides a \emph{target}
+split from past data only; the engine then invests the instalment towards that target, rebalances if
+needed, charges costs and lets the month's market returns act on the holdings.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[
+  node distance=5mm and 6mm,
+  box/.style={draw, rounded corners, fill=blue!5, align=center, minimum height=9mm, text width=3.2cm, font=\small},
+  arr/.style={-{Stealth[length=2.5mm]}, thick}]
+\node[box] (data) {Monthly returns\\Feb 2000 -- Oct 2026};
+\node[box, right=of data] (win) {Last 120 months\\(rolling window)};
+\node[box, right=of win] (tgt) {Target split\\(strategy rule)};
+\node[box, below=of tgt] (eng) {SIP engine: invest,\\rebalance, costs, returns};
+\node[box, left=of eng] (met) {Metrics: XIRR,\\volatility, drawdown, $U$};
+\node[box, left=of met] (cmp) {Compare: design on\\2010--19, test on 2020--25};
+\draw[arr] (data) -- (win); \draw[arr] (win) -- (tgt); \draw[arr] (tgt) -- (eng);
+\draw[arr] (eng) -- (met); \draw[arr] (met) -- (cmp);
+\end{tikzpicture}
+\caption{The back-testing pipeline}
+\label{fig:pipeline}
+\end{figure}
+
+\section{The rolling (walk-forward) window}
+\label{sec:window}
+
+Strategies that use an optimiser need estimates of average returns, volatilities and correlations.
+These are always computed from the \textbf{previous 120 months} (10 years). To decide month $t$, the
+optimiser sees months $t-120$ to $t-1$ only. When the window moves forward by a month, the newest
+month joins and the oldest drops out, so the window always holds 120 months and never contains
+future data.
+
+Because the data starts in February 2000, the first decision that has a full window is for
+February 2010 (window Feb~2000 -- Jan~2010). All strategies, including those that do not need a
+window, are therefore run from February 2010 so that they are compared over the same months.
+Strategies 4--7 re-fit their target once a year, every February; the Personal SIP re-fits every
+month.
+
+\section{The SIP engine}
+\label{sec:engine}
+
+Each strategy is defined by three things: how its target is set, how the instalment is split, and
+when it rebalances. The engine runs the same five steps every month for every strategy:
+
+\begin{enumerate}
+  \item \textbf{Instalment.} \Rs10{,}000 is invested on the first of the month.
+  \item \textbf{Split the instalment.} Either \emph{pro rata} ($w_i \times$ amount) or by the
+        \emph{smart split} described below.
+  \item \textbf{Rebalance if the rule says so.} Either never, once a year in January
+        (\emph{calendar}), or whenever any asset is more than 5 percentage points away from its
+        target (\emph{band}). Rebalancing trades every holding back to the target.
+  \item \textbf{Costs.} 0.1\% of the value traded is deducted.
+  \item \textbf{Market moves.} Each holding grows by its asset's return for the month.
+\end{enumerate}
+
+\paragraph{Smart split.} New money is sent first to the assets that are below their target. Let
+$h_i$ be the current holdings, $A$ the instalment, $T = \sum_i h_i + A$ the total after investing,
+and $g_i = \max(w_i T - h_i, 0)$ the gap of asset $i$, with $G = \sum_i g_i$. Then the purchase of
+asset $i$ is
+\begin{equation}
+  b_i =
+  \begin{cases}
+    g_i \,/\, G \times A & \text{if } G \ge A \quad\text{(share the money in proportion to the gaps)},\\[2pt]
+    g_i + w_i\,(A - G) & \text{if } G < A \quad\text{(fill every gap, split the rest by target)}.
+  \end{cases}
+  \label{eq:smart}
+\end{equation}
+Since $\sum_i (w_i T - h_i) = T - \sum_i h_i = A$, the positive gaps always add up to at least the
+instalment, so $G \ge A$ and the first case always applies; the second case is kept only as a
+numerical safety net. If no asset is above its target, $G = A$ and every gap is filled exactly.
+
+\paragraph{Band rebalancing.} After the purchase, the drift is
+$d = \max_i \left| \frac{h_i + b_i}{T} - w_i \right|$. If $d > 5\%$ every holding is traded to
+$w_i T$. A band rather than a calendar rule avoids trading for small deviations, as recommended by
+\citet{jaconetti2010}.
+
+\section{Performance measures}
+\label{sec:metrics}
+
+\begin{itemize}
+  \item \textbf{Time-weighted return (TWR).} The strategy's return in month $t$, measured after the
+        instalment and before the next one, so that it reflects the strategy and not the timing of
+        cash flows.
+  \item \textbf{XIRR.} The single annual rate $x$ that makes the value of all instalments, grown at
+        $x$, equal to the final portfolio value. It answers ``what yearly return did my SIP money
+        earn?'' and is found numerically.
+  \item \textbf{Volatility.} $\sigma = \text{std}(\text{TWR}) \times \sqrt{12}$. Multiplying by
+        $\sqrt{12}$ converts a monthly standard deviation to a yearly one, since variances of
+        independent months add up.
+  \item \textbf{Sharpe ratio versus liquid.}
+        $S = 12 \times \text{mean}(\text{TWR}_t - r_{\text{Liquid},t}) \,/\, \sigma$: return above
+        the investor's real safe alternative, per unit of risk \citep{sharpe1994}.
+  \item \textbf{Maximum drawdown.} The worst fall of the growth-of-\Rs1 index from a previous peak.
+\end{itemize}
+
+\section{The utility score $U$}
+\label{sec:utility}
+
+To compare strategies with one number that balances profit against risk for a given investor, the
+mean-variance utility is used \citep{markowitz1952,levy1979,bkm2021}:
+\begin{equation}
+  U = \underbrace{12 \times \text{mean}(\text{TWR}_t - r_{\text{Liquid},t})}_{\text{return above liquid}}
+      \; - \; \frac{\lambda}{2}\,\underbrace{\left(\text{std}(\text{TWR}) \sqrt{12}\right)^2}_{\text{variance}} .
+  \label{eq:U}
+\end{equation}
+
+\begin{itemize}
+  \item The first term is the reward: how much more the strategy earned than the liquid fund.
+  \item The second term is a penalty for variability. Volatility is squared, so doubling the swings
+        quadruples the penalty, in line with the observation that large losses hurt far more than
+        small ones.
+  \item $\lambda$ is the investor's risk aversion \citep{pratt1964}. Three profiles were fixed in
+        advance: \textbf{aggressive} $\lambda=2$, \textbf{moderate} $\lambda=4$ and
+        \textbf{conservative} $\lambda=8$.
+  \item $U$ is a certainty equivalent: $U = 1.36\%$ means the investor is as satisfied with the
+        risky strategy as with a guaranteed 1.36\% a year above the liquid fund.
+\end{itemize}
+
+\paragraph{Connection to Lagrange multipliers.} Markowitz's problem, ``maximise expected return for
+a given variance $\sigma^2$, with weights summing to one'', has the Lagrangian
+\begin{equation}
+  \mathcal{L} = w^\top\mu - \frac{\lambda}{2}\left(w^\top\Sigma w - \sigma^2\right) - \gamma\left(\textstyle\sum_i w_i - 1\right).
+\end{equation}
+The multiplier on the variance constraint is exactly the $\lambda$ in Eq.~\eqref{eq:U}, so
+maximising $U$ is the same as solving Markowitz's constrained problem, and $\lambda$ can be read as
+the price the investor puts on risk.
+
+\paragraph{Example.} The 60/20/20 SIP on 2010--2019 earned 2.91\% a year above liquid with 8.81\%
+volatility. For a moderate investor, $U = 2.91\% - 2 \times (8.81\%)^2 = 2.91\% - 1.55\% = 1.36\%$.
+
+\section{The strategies}
+
+All strategies hold the same three assets and run in the same engine. Table~\ref{tab:strategies}
+summarises them.
+
+\begin{table}[H]
+\centering
+\caption{The strategies compared}
+\label{tab:strategies}
+\small
+\begin{tabularx}{\textwidth}{@{}clXll@{}}
+\toprule
+\# & Name & Target & Instalment & Rebalance \\
+\midrule
+1 & Equity SIP & 100\% Nifty & pro rata & never \\
+2 & Equal-weight SIP & $\tfrac13$ each & pro rata & never \\
+3 & 60/20/20 SIP & 60\% Nifty, 20\% gold, 20\% liquid & pro rata & every January \\
+4 & Risk-parity SIP & equal risk contributions, refit every Feb & smart & 5\% band \\
+5 & Max-Sharpe SIP & maximum Sharpe ratio (vs 0\%), refit every Feb & smart & 5\% band \\
+6 & Optimized SIP & $\tfrac12$ (4) + $\tfrac12$ (5) & smart & 5\% band \\
+6b & Fixed Optimized SIP & liquid fixed at 10\%; Nifty/gold by $\tfrac12$ RP + $\tfrac12$ max Sharpe vs liquid & smart & 5\% band \\
+7 & Max-Utility SIP & maximises $U$ for the investor's $\lambda$, refit every Feb & smart & 5\% band \\
+8 & Personal SIP & liquid cushion by $\lambda$; rest as 6b; refit monthly & smart & 5\% band \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+In Strategies 4--7 every asset is kept between 10\% and 70\% of the portfolio, so no optimiser can
+put everything in one asset.
+
+\subsection{Risk parity (Strategy 4)}
+\label{sec:rp}
+
+The \emph{risk contribution} of asset $i$ is its weight times its marginal contribution to variance
+\citep{maillard2010,qian2006}:
+\begin{equation}
+  RC_i = w_i\,(\Sigma w)_i, \qquad \sum_i RC_i = w^\top\Sigma w .
+  \label{eq:rc}
+\end{equation}
+For two assets with variances $V_N, V_G$ and covariance $C$, this splits the portfolio variance
+$w_N^2V_N + 2w_Nw_GC + w_G^2V_G$ into each asset's own term plus half of the shared term:
+\begin{equation}
+  RC_N = w_N\left(w_N V_N + w_G C\right), \qquad RC_G = w_G\left(w_G V_G + w_N C\right).
+\end{equation}
+Risk parity chooses weights so that all contributions are equal. With three assets this is solved
+numerically by minimising $\sum_i (RC_i - \overline{RC})^2$ (sequential least squares, SLSQP). With
+two assets, setting $RC_N = RC_G$ cancels the shared terms and gives a closed form:
+\begin{equation}
+  w_N^2 V_N = w_G^2 V_G \;\Rightarrow\; w_N\sigma_N = w_G\sigma_G \;\Rightarrow\;
+  w_N = \frac{\sigma_G}{\sigma_N + \sigma_G}.
+  \label{eq:rp2}
+\end{equation}
+The more volatile asset receives the smaller weight. Risk parity uses no expected returns.
+
+\subsection{Maximum Sharpe ratio (Strategy 5)}
+\label{sec:maxsharpe}
+
+The maximum Sharpe portfolio maximises expected return per unit of volatility:
+\begin{equation}
+  \max_w \; \frac{w^\top \mu}{\sqrt{w^\top \Sigma w}} \quad \text{subject to } \textstyle\sum_i w_i = 1,\; 0.1 \le w_i \le 0.7 .
+  \label{eq:ms}
+\end{equation}
+For two assets with $w$ in Nifty, the numerator is a simple weighted average,
+$m = w\mu_N + (1-w)\mu_G$, while the variance
+$v = w^2V_N + 2w(1-w)C + (1-w)^2V_G$ is not. When the two assets are weakly or negatively correlated
+the middle term is small or negative, so a mix can have lower volatility than either asset alone,
+and therefore a higher Sharpe ratio. Strategy 5 uses raw returns, i.e.\ excess over 0\%.
+
+\subsection{The Optimized SIP (Strategy 6)}
+
+The average of the risk-parity and maximum-Sharpe weights. The two components fail in different
+ways: maximum Sharpe depends on noisy average returns \citep{chopra1993}, while risk parity ignores
+returns altogether. Averaging them is a simple way to hedge between the two.
+
+\subsection{The Fixed Optimized SIP (Strategy 6b)}
+\label{sec:fixed}
+
+Section~\ref{sec:res-2010} shows that Strategies 4--6 put 70\%, the maximum allowed, into the liquid
+fund. Its volatility is about 0.5\%, so measured against a 0\% rate it looks nearly risk-free with
+a large return. The correction treats liquid as cash, following \citet{tobin1958} and
+\citet{sharpe1994}:
+\begin{itemize}
+  \item The liquid share is fixed at $L$.
+  \item The rest is split between Nifty and gold by $\tfrac12$ risk parity $+\ \tfrac12$ maximum
+        Sharpe, where maximum Sharpe uses returns \emph{above liquid},
+        $\mu_i - \mu_{\text{Liquid}}$.
+  \item Nifty and gold each stay between 10\% and 70\% of the \emph{whole} portfolio. Inside the
+        risky part, which is $1-L$ of the money, this means a Nifty share between
+        $\ell = 0.1/(1-L)$ and $\min\!\left(0.7/(1-L),\, 1 - \ell\right)$.
+\end{itemize}
+$L$ was chosen from 10\%, 20\% and 30\% by the highest Sharpe ratio versus liquid on 2010--2019 only:
+10\% won (0.291 against 0.278 and 0.276) and was frozen before any later data was examined.
+
+\subsection{The Max-Utility SIP (Strategy 7)}
+
+Strategy 7 maximises the utility of Eq.~\eqref{eq:U} directly, using the window's yearly estimates:
+\begin{equation}
+  \max_w \; w^\top(\mu - \mu_{\text{Liquid}}) - \frac{\lambda}{2}\, w^\top \Sigma w ,
+  \qquad \textstyle\sum_i w_i = 1,\; 0.1 \le w_i \le 0.7 .
+\end{equation}
+Because returns are measured above liquid, the liquid share is decided by $\lambda$ itself: on the
+February 2010 window, $\lambda = 1, 2, 4$ held the minimum 10\% in liquid, while $\lambda = 8$ held
+47\% and $\lambda = 16$ the maximum 70\%.
+
+\subsection{The Personal SIP (Strategy 8)}
+\label{sec:personal}
+
+The Fixed Optimized SIP gives every investor the same 10\% liquid share, so the investor's risk
+aversion does not change its advice. The Personal SIP applies Tobin's separation directly:
+\begin{enumerate}
+  \item \textbf{How much to keep safe} is personal: a liquid cushion $L$ set by $\lambda$.
+  \item \textbf{How to split the rest} is common: Nifty and gold as in Strategy 6b, re-fitted every
+        month on the latest 120 months.
+\end{enumerate}
+The target is therefore
+\begin{equation}
+  w = \Big[(1-L)\,n,\;\; (1-L)(1-n),\;\; L\Big], \qquad
+  n = \tfrac12\, n_{\text{RP}} + \tfrac12\, n_{\text{MS}} ,
+  \label{eq:personal}
+\end{equation}
+where $n_{\text{RP}}$ is the Nifty share of the risky part from Eq.~\eqref{eq:rp2} and $n_{\text{MS}}$
+the Nifty share that maximises Eq.~\eqref{eq:ms} on returns above liquid, both clipped to the bounds
+of Section~\ref{sec:fixed}.
+
+\paragraph{Choosing the cushion.} For each profile, cushions of 10\%, 20\%, \dots, 70\% were each run
+through the full engine on Feb~2010 -- Dec~2019, scored with $U$ for that profile's $\lambda$, and
+the cushion with the highest $U$ was frozen (Section~\ref{sec:res-personal}). $U$ is therefore used
+once, to choose the cushion; it is not recomputed when the rule is applied each month.
+
+\section{Experimental design}
+\label{sec:design}
+
+To avoid choosing a rule that only looks good on the data it was built on \citep{bailey2014}, the
+data is split in time:
+\begin{itemize}
+  \item \textbf{Look-back only (Feb 2000 -- Jan 2010):} the first 120-month window.
+  \item \textbf{Design period (Feb 2010 -- Dec 2019):} all strategies are compared; the liquid share
+        of 6b and the cushions of the Personal SIP are chosen here.
+  \item \textbf{Test period (Jan 2020 -- Dec 2025):} every rule, unchanged, is run on data that
+        played no part in building it. The rule for picking the winner was fixed before the test
+        was run.
+  \item \textbf{Cross-checks:} the test-period ranking is rebuilt from the alternative funds of
+        Table~\ref{tab:funds}, and the simple strategies are recomputed with independent code.
+\end{itemize}

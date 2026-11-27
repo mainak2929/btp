@@ -1,0 +1,294 @@
+\chapter{Results}
+\label{ch:results}
+
+All results use \Rs10{,}000 invested on the first of every month and a 0.1\% cost on every trade.
+
+\section{Design period: Feb 2010 -- Dec 2019}
+\label{sec:res-2010}
+
+Over 119 months, \Rs11.9 lakh was invested in each strategy.
+
+\begin{table}[H]
+\centering
+\caption{Results, Feb 2010 -- Dec 2019 (in sample)}
+\label{tab:res-2010}
+\small
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Strategy & Final value & XIRR & Volatility & Sharpe (vs 0\%) & Sharpe vs liquid & Max drawdown \\
+\midrule
+1 Equity & \Rs21.76 lakh & 11.7\% & 15.3\% & 0.76 & 0.29 & $-23.7\%$ \\
+2 Equal-weight & \Rs18.50 lakh & 8.6\% & 6.5\% & 1.40 & 0.28 & $-6.5\%$ \\
+3 60/20/20 & \Rs19.91 lakh & 10.0\% & 8.8\% & 1.15 & \textbf{0.33} & $-8.9\%$ \\
+4 Risk parity & \Rs17.78 lakh & 7.9\% & 3.1\% & 2.59 & 0.26 & $-1.7\%$ \\
+5 Max Sharpe & \Rs17.70 lakh & 7.8\% & 3.2\% & 2.49 & 0.24 & $-1.8\%$ \\
+6 Optimized & \Rs17.74 lakh & 7.8\% & 3.2\% & 2.54 & 0.25 & $-1.7\%$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+A SIP held entirely in the liquid fund earned 7.3\%.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{07_comparison/results/wealth.png}
+\caption{Portfolio value of the six strategies, Feb 2010 -- Dec 2019}
+\label{fig:wealth-2010}
+\end{figure}
+
+\paragraph{Findings.}
+\begin{enumerate}
+  \item \textbf{100\% equity earned the most} (11.7\% a year) but suffered the largest fall
+        ($-23.7\%$ in 2011).
+  \item \textbf{60/20/20 gave the best return above the liquid fund per unit of risk} (0.33) and the
+        second-highest return.
+  \item \textbf{The optimisers (4--6) became about 70\% cash.} The liquid fund's volatility is
+        about 0.5\%, so against a 0\% rate it appears to offer a high return for almost no risk. Both
+        risk parity and maximum Sharpe therefore pushed it to the 70\% cap. Their Sharpe ratios
+        against 0\% look excellent (about 2.5), but against the liquid fund they are the lowest of
+        the six (0.24--0.26): most of their return is simply the T-bill rate. This is the issue
+        \citet{sharpe1994} warns about, and it motivated Strategy 6b.
+\end{enumerate}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\textwidth]{07_comparison/results/weights.png}
+\caption{Target weights of the Optimized SIP over time: the liquid fund sits at the 70\% cap}
+\label{fig:weights}
+\end{figure}
+
+\paragraph{Stress periods.} Table~\ref{tab:stress} shows each strategy's return during four Indian
+market stress episodes. Gold in rupees rose when the rupee fell (2011, 2013), and the liquid fund
+never fell, so the gold- and liquid-heavy strategies were positive in every episode
+\citep{baur2010}.
+
+\begin{table}[H]
+\centering
+\caption{Strategy return during Indian stress periods}
+\label{tab:stress}
+\small
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lrrrrrr@{}}
+\toprule
+Period & Equity & Equal & 60/20/20 & RP & MS & Opt. \\
+\midrule
+2011 slowdown + euro crisis (Jan--Dec 2011) & $-23.7\%$ & 4.5\% & $-6.9\%$ & 8.6\% & 9.1\% & 8.8\% \\
+2013 taper tantrum (Jun--Aug 2013) & $-8.3\%$ & 3.4\% & $-1.7\%$ & 3.9\% & 4.2\% & 4.0\% \\
+2015--16 global sell-off (Mar 2015--Feb 2016) & $-20.5\%$ & $-2.3\%$ & $-8.7\%$ & 4.9\% & 5.2\% & 5.1\% \\
+2018 IL\&FS crisis (Sep--Oct 2018) & $-10.9\%$ & $-2.4\%$ & $-5.2\%$ & 0.3\% & 0.4\% & 0.4\% \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\paragraph{Robustness.} Every 5-year SIP starting between Feb 2010 and Jan 2015 (60 windows) made
+money for every strategy. Changing the Optimized SIP's look-back (60, 90 or 120 months), band width
+or instalment rule changed its XIRR by at most 0.1 percentage points.
+
+\section{Test period: Jan 2020 -- Dec 2025}
+\label{sec:res-2020}
+
+Every rule was run unchanged on six years of data that played no part in its design (72
+instalments, \Rs7.2 lakh). The winning rule, the highest Sharpe ratio versus liquid, was fixed before
+the run.
+
+\begin{table}[H]
+\centering
+\caption{Results, Jan 2020 -- Dec 2025 (out of sample)}
+\label{tab:res-2020}
+\small
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Strategy & Final value & XIRR & Volatility & Sharpe vs liquid & Max drawdown \\
+\midrule
+1 Equity & \Rs11.39 lakh & 15.1\% & 17.8\% & 0.55 & $-28.2\%$ \\
+2 Equal-weight & \Rs12.02 lakh & 16.9\% & 7.3\% & \textbf{1.18} & $-6.8\%$ \\
+3 60/20/20 & \Rs11.69 lakh & 16.0\% & 10.7\% & 0.83 & $-15.4\%$ \\
+4 Risk parity & \Rs10.11 lakh & 11.2\% & 3.4\% & 1.16 & $-3.0\%$ \\
+5 Max Sharpe & \Rs10.08 lakh & 11.1\% & 3.4\% & 1.13 & $-3.2\%$ \\
+6 Optimized & \Rs10.09 lakh & 11.1\% & 3.4\% & 1.14 & $-3.1\%$ \\
+6b Fixed Optimized & \textbf{\Rs13.28 lakh} & \textbf{20.3\%} & 10.3\% & 1.09 & $-12.2\%$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+A SIP held entirely in the liquid fund earned 6.2\%.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\textwidth]{08_forward_test/results/wealth_2020_2025.png}
+\caption{Portfolio value of all strategies, Jan 2020 -- Dec 2025 (out of sample)}
+\label{fig:wealth-2020}
+\end{figure}
+
+\paragraph{Findings.}
+\begin{enumerate}
+  \item \textbf{The equal-weight SIP won by the pre-set rule}, with the best return per unit of
+        risk, consistent with \citet{demiguel2009}.
+  \item \textbf{The correction in 6b worked out of sample.} The original Optimized SIP stayed about
+        70\% in cash and earned 11.1\%; the fixed version earned 20.3\%, the highest of all.
+  \item \textbf{Caveat: 2020--2025 was a gold boom.} Rupee gold rose about 21\% a year, including
+        about 72\% in 2025. Gold-heavy mixes (equal-weight at one third, 6b at 33--49\%) gained the
+        most. In 2010--2019, when rupee gold rose only about 3\% a year, neither of them was best.
+\end{enumerate}
+
+\paragraph{Cross-checks.} Rebuilt from the alternative funds of Table~\ref{tab:funds}, every
+strategy kept its rank and its XIRR changed by at most 0.17 percentage points. Strategies 1--3
+recomputed with independent code matched the engine's final values exactly.
+
+\section{Which approach maximises utility?}
+\label{sec:res-utility}
+
+Following the guide's suggestion, all strategies were then compared on one score that balances
+return against risk, the utility $U$ of Eq.~\eqref{eq:U}, for three investor profiles. Strategy 7,
+which maximises $U$ directly, was added to the competition.
+
+\begin{table}[H]
+\centering
+\caption{Strategy with the highest utility $U$ for each investor profile}
+\label{tab:utility}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Investor & Highest $U$, 2010--2019 (in sample) & Highest $U$, 2020--2025 (out of sample) \\
+\midrule
+Aggressive ($\lambda=2$) & 60/20/20 (2.13\%) & Fixed Optimized (10.25\%) \\
+Moderate ($\lambda=4$) & 60/20/20 (1.36\%) & Fixed Optimized (9.18\%) \\
+Conservative ($\lambda=8$) & Risk parity (0.44\%) & Fixed Optimized (7.04\%) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Strategy 7 (Max-Utility SIP): its $U$ and its rank among eight strategies}
+\label{tab:s7}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Period & $\lambda=2$ & $\lambda=4$ & $\lambda=8$ \\
+\midrule
+2010--2019 & 1.61\% (4th) & 0.64\% (4th) & $-0.46\%$ (6th) \\
+2020--2025 & 9.04\% (2nd) & 7.63\% (2nd) & 5.55\% (3rd) \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\paragraph{Findings.}
+\begin{enumerate}
+  \item \textbf{The best strategy depends on the investor.} In 2010--2019 the answer changes with
+        $\lambda$.
+  \item \textbf{Maximising $U$ directly did not maximise the $U$ achieved.} Strategy 7 optimises
+        exactly the score it is judged on, yet it never came first. It trusts the window's average
+        returns, which are noisy, and over-weights whatever did well recently. This is the
+        estimation-error problem described by \citet{michaud1989} and \citet{chopra1993}. Rules that
+        rely less on average returns held up better.
+  \item \textbf{The Fixed Optimized SIP had the highest $U$ for every profile out of sample}, and
+        the ranking held on the alternative-fund data. In 2010--2019 it ranked 3rd, 2nd and 7th.
+  \item \textbf{100\% equity never won}: its 17.8\% volatility in 2020--2025 cost more, in $U$,
+        than its extra return.
+\end{enumerate}
+
+\section{The Personal SIP}
+\label{sec:res-personal}
+
+\subsection{Choosing the cushion (2010--2019 only)}
+
+\begin{table}[H]
+\centering
+\caption{$U$ of the Personal SIP for each liquid cushion, Feb 2010 -- Dec 2019 (best in bold)}
+\label{tab:cushion}
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}cccc@{}}
+\toprule
+Cushion & Aggressive ($\lambda=2$) & Moderate ($\lambda=4$) & Conservative ($\lambda=8$) \\
+\midrule
+10\% & \textbf{1.52\%} & 0.68\% & $-0.99\%$ \\
+20\% & 1.41\% & 0.75\% & $-0.57\%$ \\
+30\% & 1.31\% & \textbf{0.80\%} & $-0.21\%$ \\
+40\% & 1.17\% & 0.80\% & 0.05\% \\
+50\% & 1.01\% & 0.75\% & 0.23\% \\
+60\% & 0.83\% & 0.66\% & 0.33\% \\
+70\% & 0.69\% & 0.59\% & \textbf{0.40\%} \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+The chosen cushions are 10\% (aggressive), 30\% (moderate) and 70\% (conservative). For the
+moderate investor, 30\% narrowly beat 40\% (0.7997\% against 0.7990\%). The calculation for the
+moderate investor shows the trade-off that $U$ resolves:
+\begin{align*}
+  L = 10\%:&\quad U = 2.354\% - 2 \times (9.145\%)^2 = 2.354\% - 1.673\% = 0.681\% \\
+  L = 30\%:&\quad U = 1.814\% - 2 \times (7.121\%)^2 = 1.814\% - 1.014\% = 0.800\% \\
+  L = 70\%:&\quad U = 0.786\% - 2 \times (3.096\%)^2 = 0.786\% - 0.192\% = 0.594\%
+\end{align*}
+A small cushion earns the most but swings so much that the penalty absorbs most of the gain; a large
+cushion barely swings but barely earns.
+
+\subsection{Out-of-sample test (2020--2025)}
+
+\begin{table}[H]
+\centering
+\caption{Personal SIP versus the Fixed Optimized SIP, Jan 2020 -- Dec 2025}
+\label{tab:personal}
+\small
+\begin{adjustbox}{max width=\textwidth}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Investor (cushion) & \multicolumn{2}{c}{Personal SIP} & Rank & Fixed Optimized SIP \\
+ & $U$ & XIRR / worst fall & (of 11) & $U$ / XIRR / worst fall \\
+\midrule
+Aggressive (10\%) & 9.99\% & 20.4\% / $-11.8\%$ & 3 & 10.25\% / 20.3\% / $-12.2\%$ \\
+Moderate (30\%) & 7.25\% & 17.2\% / $-9.0\%$ & 5 & 9.18\% / 20.3\% / $-12.2\%$ \\
+Conservative (70\%) & 3.24\% & 11.0\% / $-3.4\%$ & 9 & 7.04\% / 20.3\% / $-12.2\%$ \\
+\bottomrule
+\end{tabular}
+\end{adjustbox}
+\end{table}
+
+\paragraph{Findings.}
+\begin{enumerate}
+  \item \textbf{It personalises the advice.} The conservative investor's worst fall shrinks from
+        $-12.2\%$ to $-3.4\%$.
+  \item \textbf{It did not beat the Fixed Optimized SIP on $U$.} The cushions were chosen in
+        2010--2019, when Nifty and gold earned little above the liquid fund; 2020--2025 rewarded
+        holding them. A cushion learned in one period can be too cautious for the next, the same
+        estimation problem as in Section~\ref{sec:res-utility}. Even for $\lambda = 8$, the Fixed
+        Optimized SIP's extra 7.6\% a year above liquid outweighed its larger variance penalty
+        ($4 \times 10.34\%^2 = 4.28\%$ against $4 \times 3.38\%^2 = 0.46\%$).
+  \item \textbf{Re-fitting monthly or yearly gave almost the same results}, so the monthly rolling
+        window used by the website costs nothing in performance.
+\end{enumerate}
+
+The Personal SIP was nevertheless chosen for the website because it is the only rule in which the
+investor's stated risk tolerance changes the advice, which is the purpose of asking for it.
+
+\section{Live check: January -- October 2026}
+
+The 2026 months were published after all choices had been made. Nifty fell sharply in March
+($-11.3\%$) and September ($-6.1\%$); gold rose 23.5\% in January and then fell back ($-9.6\%$ in
+June, $-5.2\%$ in October). With \Rs1{,}00{,}000 invested over ten months, the cash-heavy Optimized
+SIP was worth \Rs1{,}00{,}546 at the end of October, equal-weight \Rs97{,}503, 100\% equity
+\Rs96{,}027 and the gold-heavy Fixed Optimized SIP \Rs95{,}748. Ten months is far too short to judge
+a SIP, but the ordering illustrates the trade-off: in a falling market the cautious mix loses least.
+
+\section{Summary}
+
+\begin{itemize}
+  \item With a cash-like asset in the portfolio, risk must be measured against that asset; otherwise
+        optimisers simply hold cash.
+  \item No single strategy was best in both periods. Equal-weight and 60/20/20 were the most
+        consistent on return per unit of risk; the Fixed Optimized SIP had the highest return and
+        utility out of sample, helped by a gold boom.
+  \item Directly maximising utility did not achieve the highest utility, confirming that
+        estimation error matters more than the precise objective.
+  \item Making the liquid share depend on risk aversion produces genuinely different, and for
+        cautious investors much safer, portfolios, at a cost in return in strong markets.
+\end{itemize}

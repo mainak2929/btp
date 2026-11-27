@@ -2,3 +2,11 @@ __pycache__/
 *.pyc
 .pytest_cache/
 website/site/
+report/*.aux
+report/*.log
+report/*.bbl
+report/*.blg
+report/*.toc
+report/*.lof
+report/*.lot
+report/*.out
