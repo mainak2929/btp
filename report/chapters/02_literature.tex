@@ -1,20 +1,15 @@
-\chapter{Literature Review}
+\section{Literature Review}
 \label{ch:lit}
 
-This chapter summarises the work on which each part of the project rests, in the order in which
+This section summarises the work on which each part of the project rests, in the order in which
 the ideas are used.
 
-\section{Mean-variance portfolio theory}
+\subsection{Mean-variance portfolio theory}
 
 \citet{markowitz1952} showed that an investor who cares about expected return and variance should
-not judge an asset on its own, but by what it adds to the whole portfolio. For two assets with
-weights $w$ and $1-w$, the portfolio variance is
-\begin{equation}
-  \sigma_p^2 = w^2\sigma_1^2 + 2w(1-w)\,\mathrm{Cov}(r_1,r_2) + (1-w)^2\sigma_2^2 ,
-\end{equation}
-so assets that do not move together reduce risk when combined. This diversification effect is the
-reason for holding Nifty and gold together, and the formula is used directly in
-Section~\ref{sec:maxsharpe}.
+not judge an asset on its own, but by what it adds to the whole portfolio. Assets that do not
+move together reduce risk when combined; this diversification effect is the reason for holding Nifty
+and gold together (Section~\ref{sec:maxsharpe}).
 
 \citet{tobin1958} added a risk-free asset and showed that the problem separates into two decisions:
 (i) the mix of risky assets, which is the same for every investor, and (ii) how much to hold in the
@@ -23,7 +18,7 @@ basis of the Personal SIP (Section~\ref{sec:personal}): the liquid fund plays th
 risk-free asset, its share is set by the investor's risk aversion, and the Nifty/gold split is
 common to everyone.
 
-\section{Risk-adjusted performance: the Sharpe ratio}
+\subsection{Risk-adjusted performance: the Sharpe ratio}
 
 \citet{sharpe1966} proposed the reward-to-variability ratio, later called the Sharpe ratio: the
 return in excess of a risk-free rate divided by volatility. \citet{sharpe1994} restated it and
@@ -32,7 +27,7 @@ to be central in this project: with a liquid fund in the portfolio, measuring ex
 0\% instead of against the liquid fund makes cash look nearly perfect
 (Section~\ref{sec:res-2010}).
 
-\section{Risk aversion and mean-variance utility}
+\subsection{Risk aversion and mean-variance utility}
 
 \citet{pratt1964} formalised \emph{risk aversion} and the \emph{certainty equivalent}: the sure
 amount an investor would accept in place of a risky prospect. For returns that are not extreme,
@@ -48,7 +43,7 @@ above the liquid fund and $A$ written as $\lambda$ (Section~\ref{sec:utility}). 
 equivalent to Markowitz's problem of maximising return for a given variance, with $\lambda$ acting
 as the Lagrange multiplier on the variance constraint.
 
-\section{Risk parity}
+\subsection{Risk parity}
 
 Risk parity allocates so that each asset contributes the same share of total portfolio risk.
 \citet{maillard2010} define the risk contribution of asset $i$ as $w_i(\Sigma w)_i$ and study the
@@ -58,7 +53,7 @@ portfolios have historically delivered good risk-adjusted returns. Because risk 
 volatilities and correlations, not expected returns, it is far less sensitive to estimation error,
 which is why it is one of the two components of the allocation rule used here.
 
-\section{Estimation error}
+\subsection{Estimation error}
 
 Optimisers need estimates of expected returns, variances and covariances, and these are noisy.
 \citet{michaud1989} showed that mean-variance optimisers act as ``error maximisers'': they put the
@@ -66,35 +61,22 @@ most weight on assets whose returns happen to be overestimated. \citet{chopra199
 in expected returns are roughly ten times as damaging as errors in variances. \citet{demiguel2009}
 found that a simple $1/N$ (equal-weight) portfolio was not consistently beaten out of sample by
 fourteen optimised models, while \citet{kritzman2010} argued that optimisation does add value when
-inputs are estimated sensibly. This debate is tested directly in Chapter~\ref{ch:results}, where an
+inputs are estimated sensibly. This debate is tested directly in Section~\ref{ch:results}, where an
 equal-weight SIP, several optimisers and a direct utility maximiser are compared on unseen data.
 \citet{bailey2014} warn that trying many variations on one data set produces back-tests that look
 good by chance; the strict separation of design (2010--2019) and test (2020--2025) periods in this
 project follows that advice.
 
-\section{Gold as a diversifier}
+\subsection{Gold, SIPs and rebalancing}
 
-\citet{baur2010} found that gold is a hedge against equities on average and a ``safe haven'' during
-extreme market falls. For an Indian investor, gold bought in rupees also rises when the rupee
-weakens, which happened in several Indian stress periods (Section~\ref{sec:res-2010}).
-
-\section{Dollar-cost averaging and rebalancing}
-
-A SIP is a form of dollar-cost (rupee-cost) averaging. \citet{constantinides1979} showed that a
-fixed averaging schedule is not optimal for a rational investor with a lump sum available, and
-\citet{vanduffel2012} constructed strategies that dominate it. These results apply to investing a
-lump sum gradually; a salaried investor who receives income monthly has no lump sum, so the
-question becomes how to allocate each instalment, which is the focus here.
-
-How often to rebalance is studied by \citet{perold1988}, who compare constant-mix and other dynamic
+Gold is a hedge against equities on average and a safe haven in market crashes \citep{baur2010}; for an Indian investor, rupee gold also rises when the rupee weakens. 
+A SIP is a form of rupee-cost averaging, which is not optimal for a lump sum \citep{constantinides1979,vanduffel2012}; for a salaried investor with no lump sum, the question becomes how to allocate each instalment. How often to rebalance is studied by \citet{perold1988}, who compare constant-mix and other dynamic
 strategies, and by \citet{jaconetti2010}, who recommend rebalancing only when allocations drift
 beyond a threshold, in the range of about 5\%, rather than on a fixed calendar. The 5\% band rule in
 this project's engine follows that recommendation.
 
-\section{Gap addressed by this project}
+\subsection{Gap addressed}
 
-Most of the literature studies lump-sum portfolios of developed-market equities and bonds. This
-project applies the same tools to monthly instalments of an Indian investor holding equities, gold
-and a cash-like liquid fund; shows how the presence of a cash-like asset changes what the optimisers
-do; and turns the result into a rule that depends on the individual investor's risk aversion and can
-be used every month.
+This project applies these tools to the monthly instalments of an Indian investor holding equities,
+gold and a cash-like liquid fund, shows how the cash-like asset changes what optimisers do, and turns
+the result into a rule that depends on the investor's own risk aversion.

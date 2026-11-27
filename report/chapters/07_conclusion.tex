@@ -1,7 +1,7 @@
-\chapter{Conclusion and Future Work}
+\section{Conclusion and Future Work}
 \label{ch:conclusion}
 
-\section{Conclusions}
+\subsection{Conclusions}
 
 This project built a walk-forward back-testing engine for monthly SIPs in Nifty~50, gold and a
 liquid fund, applied it to Indian data from 2000 to 2026, and turned the final rule into a public
@@ -30,30 +30,12 @@ planning tool. The main conclusions are:
         two-minute monthly routine, with results verified against the research code.
 \end{enumerate}
 
-\section{Limitations}
+\subsection{Limitations and future work}
 
-\begin{itemize}
-  \item \textbf{Data.} Nifty dividends before 2020 are a constant 1.3\% a year; gold before 2020 is
-        the international price in rupees, without Indian import duty; the liquid series before 2020
-        is an index built from T-bill yields rather than a real fund.
-  \item \textbf{Short test period.} Six out-of-sample years contain one crash and one gold boom;
-        differences in utility between strategies are estimates with wide uncertainty.
-  \item \textbf{Risk aversion is assumed.} The values $\lambda = 2, 4, 8$ are conventional, not
-        measured from real investors.
-  \item \textbf{Variance treats gains and losses alike.} The utility score penalises upward swings
-        as much as falls and does not capture crash risk directly.
-  \item \textbf{Frictions.} Costs are a flat 0.1\%; taxes on sales and exit loads are ignored.
-\end{itemize}
-
-\section{Future work}
-
-\begin{itemize}
-  \item Set $\lambda$ from a short risk questionnaire instead of three fixed profiles.
-  \item Add a drawdown penalty to the score, $U - \kappa\,|\text{maximum drawdown}|$, to capture
-        crash risk.
-  \item Reduce estimation error in the maximum-Sharpe step, for example by shrinking average returns
-        towards a common value.
-  \item Fetch each month's fund prices automatically, so the planner never needs manual updates.
-  \item Include capital-gains tax and exit loads when deciding whether a reset is worthwhile.
-  \item Extend the asset set, for example with a government-bond fund or international equity.
-\end{itemize}
+The data before 2020 uses a constant 1.3\% Nifty dividend yield, international gold without Indian
+import duty, and a T-bill index rather than a real liquid fund. The test period is only six years.
+The values $\lambda = 2, 4, 8$ are assumed rather than measured, variance penalises gains as much as
+losses, and taxes and exit loads are ignored. Natural extensions are: setting $\lambda$ from a risk
+questionnaire; adding a drawdown penalty to $U$; shrinking estimated returns to reduce estimation
+error; fetching fund prices automatically each month; and including taxes when deciding whether to
+rebalance.

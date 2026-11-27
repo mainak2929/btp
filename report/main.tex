@@ -1,6 +1,6 @@
 % B.Tech Project report: A Simple Optimized SIP Strategy for Multi-Asset Allocation
 % Build:  cd report && pdflatex main && bibtex main && pdflatex main && pdflatex main
-\documentclass[12pt,a4paper,oneside]{report}
+\documentclass[11pt,a4paper]{article}
 
 % ------------------------------------------------------------------ details to fill in
 \newcommand{\studentname}{Mainak Biswas}
@@ -16,7 +16,7 @@
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
-\usepackage[margin=1in,left=1.25in]{geometry}
+\usepackage[margin=1in]{geometry}
 \usepackage{setspace}
 \usepackage{amsmath,amssymb}
 \usepackage{graphicx}
@@ -34,7 +34,7 @@
 \usepackage{enumitem}
 \usepackage{adjustbox}
 
-\onehalfspacing
+\setstretch{1.2}
 \graphicspath{{../}{figures/}}
 \setlist{itemsep=2pt,topsep=4pt}
 
@@ -56,6 +56,7 @@
 
 % ================================================================== title page
 \begin{titlepage}
+  \thispagestyle{empty}
   \centering
   \vspace*{0.5cm}
   {\LARGE\bfseries \reporttitle\par}
@@ -81,52 +82,9 @@
   {\large \submissiondate\par}
 \end{titlepage}
 
-\pagenumbering{roman}
-
-% ================================================================== certificate
-\chapter*{Certificate}
-\addcontentsline{toc}{chapter}{Certificate}
-This is to certify that the project report entitled \textbf{``\reporttitle''}, submitted by
-\textbf{\studentname} (Roll No.\ \rollno) to \college, is a record of bona fide work carried out
-under my supervision and guidance. The work reported here has not been submitted
-elsewhere for the award of any degree.
-
-\vspace{2.5cm}
-\noindent\begin{tabular}{@{}l}
-\rule{6cm}{0.4pt}\\
-\guide\\
-Project Guide\\
-\department, \college\\
-Date:
-\end{tabular}
-
-% ================================================================== declaration
-\chapter*{Declaration}
-\addcontentsline{toc}{chapter}{Declaration}
-I declare that this report represents my own work, carried out under the guidance of \guide.
-Where I have used the ideas, results or words of others, I have cited the original sources.
-I have not submitted this work for any other degree.
-
-\vspace{2.5cm}
-\noindent\begin{tabular}{@{}l}
-\rule{6cm}{0.4pt}\\
-\studentname\\
-Roll No.\ \rollno\\
-Date:
-\end{tabular}
-
-% ================================================================== acknowledgements
-\chapter*{Acknowledgements}
-\addcontentsline{toc}{chapter}{Acknowledgements}
-I am grateful to my guide, \guide, for the direction given throughout this project, and in particular
-for the suggestion to judge the strategies by a single measure that balances return against risk,
-which became the utility score used in Chapters~4 to~6. I also thank the \department\ of \college\
-for the opportunity to carry out this work. Public data from the Association of Mutual Funds in
-India, the Federal Reserve Bank of St.\ Louis and the World Bank made the study possible.
 
 % ================================================================== abstract
-\chapter*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
+\section*{Abstract}
 A Systematic Investment Plan (SIP) invests a fixed amount every month. This project asks how an
 Indian SIP investor should split each instalment between three assets: Nifty~50 equities, gold
 and a liquid (money-market) fund, using only information available at the time and taking the
@@ -156,37 +114,8 @@ results match the Python engine to within half a rupee.
 \noindent\textbf{Keywords:} systematic investment plan, asset allocation, risk parity, Sharpe ratio,
 mean-variance utility, walk-forward back-test, Nifty~50, gold
 
-\tableofcontents
-\listoffigures
-\listoftables
 
-% ================================================================== notation
-\chapter*{Notation and Abbreviations}
-\addcontentsline{toc}{chapter}{Notation and Abbreviations}
-\begin{tabularx}{\textwidth}{@{}lX@{}}
-\toprule
-Symbol & Meaning \\
-\midrule
-SIP & Systematic Investment Plan: a fixed amount invested every month \\
-NAV & Net asset value of a mutual fund unit \\
-$r_{i,t}$ & Return of asset $i$ in month $t$ \\
-$w_i$ & Target share (weight) of asset $i$ \\
-$\mu_i$ & Average return of asset $i$ over the look-back window \\
-$\sigma_i$ & Volatility (standard deviation of returns) of asset $i$ \\
-$\Sigma$, $C$ & Covariance matrix; covariance between Nifty and gold \\
-$\rho$ & Correlation \\
-$L$ & Liquid ``cushion'': the share kept in the liquid fund \\
-$\lambda$ & Risk aversion of the investor (2, 4 or 8) \\
-$U$ & Mean-variance utility (Eq.~\ref{eq:U}) \\
-RC & Risk contribution of an asset (Eq.~\ref{eq:rc}) \\
-TWR & Time-weighted return of a strategy \\
-XIRR & Money-weighted annual return of a SIP (internal rate of return) \\
-MDD & Maximum drawdown: worst fall from a previous peak \\
-\bottomrule
-\end{tabularx}
 
-\cleardoublepage
-\pagenumbering{arabic}
 
 \input{chapters/01_introduction}
 \input{chapters/02_literature}
@@ -199,7 +128,5 @@ MDD & Maximum drawdown: worst fall from a previous peak \\
 \bibliographystyle{plainnat}
 \bibliography{references}
 
-\appendix
-\input{chapters/appendix}
 
 \end{document}

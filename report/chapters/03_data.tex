@@ -1,28 +1,13 @@
-\chapter{Data}
+\section{Data}
 \label{ch:data}
 
 Every strategy in this project reads one table: the monthly return, in rupees, of each of the three
-assets. This chapter explains how that table was built for three periods with different sources,
+assets. This section explains how that table was built for three periods with different sources,
 and how each source was checked.
 
-\section{The three assets}
+The three assets are the Nifty~50 (India's 50 largest companies, with dividends), gold bought in rupees, and a liquid fund that earns about the 91-day T-bill rate and almost never falls.
 
-\begin{table}[H]
-\centering
-\caption{The three assets}
-\label{tab:assets}
-\begin{tabularx}{\textwidth}{@{}lXX@{}}
-\toprule
-Asset & What it represents & Behaviour \\
-\midrule
-Nifty & India's 50 largest listed companies (Nifty~50), with dividends & Highest long-run return; large swings \\
-Gold & Gold bought in Indian rupees & Swings, but often at different times from equities \\
-Liquid & A liquid fund: very short-term government and money-market paper & Earns about the 91-day T-bill rate; almost never falls \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-\section{From prices to monthly returns}
+\subsection{From prices to monthly returns}
 
 A SIP invests once a month, so each daily series is sampled at the month end and turned into the
 growth of one rupee over the month:
@@ -33,7 +18,7 @@ growth of one rupee over the month:
 where $P_t$ is the last available value in month $t$. Because a return needs a previous month, the
 closing values of January~2000 are the starting point and the first return is for February~2000.
 
-\section{Period 1: Feb 2000 -- Dec 2019}
+\subsection{Period 1: Feb 2000 -- Dec 2019}
 
 The base file contains daily values of the Nifty~50 price index, the international gold price in US
 dollars per ounce, and a liquid-fund index that grows each day by the 91-day T-bill yield divided by
@@ -61,80 +46,26 @@ For February 2010: $\$1{,}118.9 \times 46.05 = \Rs51{,}525.35$ against $\$1{,}08
 $L_d = L_{d-1}(1 + y_d/365)$, and its monthly return is computed with Eq.~\eqref{eq:return}. For
 February 2010: $188.1263 / 187.5356 - 1 = 0.315\%$.
 
-\paragraph{Verification.} Nifty closes were matched against two independent NSE-sourced files:
-99.94\% of 4{,}812 trading days were identical, and the only differences were special weekend
-sessions, none at a month end. The gold column was confirmed to be US dollars per ounce by matching a
-monthly gold series \citep{worldbank} to within 0.33\% on average. The liquid index's implied rate
-steps weekly, as 91-day T-bill auctions do, and follows the known history of Indian T-bill yields
-(about 9.25\% in 2000, 3.3\% in 2009, a spike to 12\% in August 2013, 5--6\% in 2019).
-
-\begin{table}[H]
-\centering
-\caption{Annual return and volatility of the three assets, Feb 2000 -- Dec 2019}
-\label{tab:asset-stats}
-\begin{adjustbox}{max width=\textwidth}
-\begin{tabular}{@{}lccc@{}}
-\toprule
- & Nifty (with dividends) & Gold (\Rs) & Liquid \\
-\midrule
-Return per year & 12.4\% & 11.5\% & 7.0\% \\
-Volatility per year & 22.6\% & 16.7\% & 0.5\% \\
-\bottomrule
-\end{tabular}
-\end{adjustbox}
-\end{table}
+\paragraph{Verification.} Nifty closes matched two independent NSE-sourced files on 99.94\% of trading days; the gold column matched a monthly gold series \citep{worldbank} to within 0.33\%; the liquid index followed the known history of 91-day T-bill yields.
 
 In the first ten years (Feb 2000 -- Jan 2010), the correlation between Nifty and gold was $0.09$,
 between Nifty and liquid $-0.27$, and between gold and liquid $-0.09$. All are low or negative, which
 is the reason for combining these three assets.
 
-\section{Period 2: Jan 2020 -- Dec 2025}
+\subsection{Period 2: Jan 2020 -- Dec 2025}
 
 The base file ends in December 2019. For the following six years, each asset was built from the
 month-end NAVs of two real Indian funds that track it, taken from the Association of Mutual Funds in
 India (AMFI) daily NAV archive \citep{amfi}. Each asset's return is the average of its two funds'
 returns.
 
-\begin{table}[H]
-\centering
-\caption{Funds used for 2020 onwards (direct, growth plans)}
-\label{tab:funds}
-\begin{tabularx}{\textwidth}{@{}lXX@{}}
-\toprule
-Asset & Built from (average of) & Used only for cross-checks \\
-\midrule
-Nifty & UTI Nifty 50 Index Fund; HDFC Nifty 50 Index Fund & Kotak Nifty 50 ETF \\
-Gold & HDFC Gold ETF; Nippon India ETF Gold BeES & Kotak Gold ETF; ICICI Prudential Gold ETF \\
-Liquid & SBI Liquid Fund; ICICI Prudential Liquid Fund & Nippon India Liquid Fund; HDFC Liquid Fund \\
-\bottomrule
-\end{tabularx}
-\end{table}
+Nifty is the average of the UTI and HDFC Nifty~50 index funds, gold the average of the HDFC Gold ETF and Nippon India ETF Gold BeES, and liquid the average of the SBI and ICICI Prudential liquid funds (direct, growth plans). Further funds tracking each asset (Kotak Nifty~50 ETF; Kotak and ICICI gold ETFs; Nippon and HDFC liquid funds) were used only for cross-checks. A growth-plan NAV already includes reinvested dividends, and ETF unit splits were reversed. Each asset was cross-checked twice: against the other funds tracking it (correlations 0.997--1.000) and against independent figures (published Nifty closes, international gold in rupees, RBI 91-day T-bill yields). Over 2020--2025 the series returned 14.6\% a year for Nifty, 21.3\% for gold and 5.6\% for liquid.
 
-A growth-plan NAV already includes reinvested dividends, so no dividend adjustment is needed. Unit
-splits of exchange-traded funds (for example 1:10, which appears as a $-90\%$ month) were detected
-and reversed. Each asset was cross-checked twice:
-\begin{itemize}
-  \item \textbf{Against other funds tracking the same asset.} Correlation with the check funds was
-        1.000 for Nifty, 0.997--0.998 for gold and 0.998--0.999 for liquid.
-  \item \textbf{Against independent figures.} The Nifty series exceeded the published year-end
-        index closes by 0.6\% to 1.2\% each year, which is dividends less fund costs; gold followed
-        the international price in rupees, with gaps matching India's import-duty changes
-        (raised in July 2022, cut from 15\% to 6\% in July 2024); and the liquid series tracked
-        RBI 91-day T-bill cut-off yields.
-\end{itemize}
-An overlap test on Feb 2013 -- Dec 2019, when both kinds of source exist, gave correlations of 0.999
-(Nifty) and 0.97 (gold), so the change of source in 2020 does not change what each asset is. Over
-2020--2025 the series returned 14.6\% a year for Nifty, 21.3\% for gold and 5.6\% for liquid.
-
-\section{Period 3: Jan -- Oct 2026}
+\subsection{Period 3: Jan -- Oct 2026}
 
 The same funds' month-end NAVs for January to October 2026 were added so that the website can plan
 the next instalment. These months are \emph{not} used in any back-test. They were checked the same
 way: the main and check funds for each asset agreed to within 0.2\% in every month, and gold followed
 the international price in rupees in direction.
 
-\section{The final table}
-
-The result is a single table of monthly returns, Feb~2000 to Oct~2026, with one row per month and
-three columns. The back-tests use Feb~2000 -- Dec~2025 (311 months); the website uses the latest 120
-months.
+The result is one table of monthly returns, Feb~2000 to Oct~2026. The back-tests use Feb~2000 -- Dec~2025; the website uses the latest 120 months.

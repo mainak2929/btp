@@ -1,33 +1,16 @@
-\chapter{The Personal SIP Planner: Implementation}
+\section{The Personal SIP Planner: Implementation}
 \label{ch:website}
 
 The end point of the project is a website that applies the Personal SIP rule for one investor, for
-the next month. This chapter describes what it does, how it does it, and works through one complete
+the next month. This section describes what it does, how it does it, and works through one complete
 calculation with real data.
 
-\section{What the user does}
+\subsection{What the user does}
 
 The page is public at \url{https://mainak2929.github.io/personal-sip-planner/}. It needs no login and
 no installation.
 
-\begin{table}[H]
-\centering
-\caption{Inputs and outputs of the planner}
-\label{tab:io}
-\begin{tabularx}{\textwidth}{@{}XX@{}}
-\toprule
-The user enters & The user gets \\
-\midrule
-Risk level: aggressive, moderate or conservative ($\lambda = 2, 4, 8$) & The target split, shown as a bar \\
-Monthly SIP amount & How much to buy (or sell) in each fund this month \\
-The current value of their three funds & Whether a reset is needed (drift above 5\%) \\
-Optionally, last month's return of each fund & Three plain-language lines explaining the split \\
- & The rule's 2020--2025 test result for that risk level \\
-\bottomrule
-\end{tabularx}
-\end{table}
-
-Each month the investor updates the three values from their investment app, optionally adds last
+The user enters a risk level (aggressive, moderate or conservative), the monthly amount and the current value of their three funds, and optionally last month's returns. The page shows the target split, how much to buy (or sell) in each fund, and three plain-language lines explaining the split, together with the rule's 2020--2025 test result. Each month the investor updates the three values from their investment app, optionally adds last
 month's returns, and places the purchases shown. Every result is recalculated as soon as an input
 changes.
 
@@ -38,23 +21,14 @@ changes.
 \label{fig:website}
 \end{figure}
 
-\section{Design}
+\subsection{Design}
 
-\begin{itemize}
-  \item \textbf{Runs entirely in the browser.} The page carries the latest 120 months of returns,
-        the frozen cushions and the 2020--2025 test results in a small data file (about 6~KB). All
-        calculations run on the user's device; nothing the user types is sent anywhere. Months the
-        user adds are stored only in their own browser.
-  \item \textbf{Same rule as the back-test.} The engine (\code{sip.js}, Appendix~\ref{app:code}) is a
-        JavaScript translation of the Python functions used in Chapters~\ref{ch:method}
-        and~\ref{ch:results}: \code{optimized\_cash\_buffer} for the target and \code{\_smart\_split}
-        with the 5\% band for the purchases.
-  \item \textbf{Two-asset closed forms.} With only Nifty and gold in the risky part, risk parity
-        uses Eq.~\eqref{eq:rp2} directly, and maximum Sharpe is found by evaluating 2{,}001 evenly
-        spaced Nifty shares between the bounds and refining the best one by golden-section search.
-  \item \textbf{Hosting.} The site is three static files (\code{index.html}, \code{sip.js},
-        \code{data.js}) served free by GitHub Pages from a public repository.
-\end{itemize}
+The page runs entirely in the browser: it carries the latest 120 months of returns, the frozen
+cushions and the 2020--2025 test results in a 6~KB data file, so nothing the user types is sent
+anywhere. Its engine (\code{sip.js}) is a JavaScript translation of the Python functions used in the
+back-test. With only Nifty and gold in the risky part, risk parity uses Eq.~\eqref{eq:rp2} directly,
+and maximum Sharpe is found by evaluating 2{,}001 evenly spaced Nifty shares and refining the best.
+The site is three static files served free by GitHub Pages.
 
 \begin{figure}[H]
 \centering
@@ -82,7 +56,7 @@ changes.
 \label{fig:site-flow}
 \end{figure}
 
-\section{A complete worked example}
+\subsection{A complete worked example}
 \label{sec:example}
 
 This section follows the exact calculation behind Figure~\ref{fig:website}: a \textbf{moderate}
@@ -90,7 +64,7 @@ investor ($\lambda = 4$, cushion $L = 30\%$) on 1 November 2026, investing \Rs10
 Nifty \Rs70{,}000, gold \Rs1{,}10{,}000 and liquid \Rs75{,}000. The window is the 120 months
 November 2016 -- October 2026.
 
-\subsection{Step 1: summarise the window}
+\subsubsection{Step 1: summarise the window}
 
 \paragraph{Return above liquid.} For each month, the liquid return is subtracted from the Nifty and
 gold returns; the 120 differences are averaged and multiplied by 12:
@@ -112,14 +86,14 @@ the square root is annualised with $\sqrt{12} = 3.464$:
 divided by 119 and multiplied by 12, the yearly covariance is $C = -0.0011105$, and the correlation
 is $-0.044$. Over this decade, Nifty and gold were practically unrelated.
 
-\subsection{Step 2: bounds}
+\subsubsection{Step 2: bounds}
 
 The risky part is $1 - L = 70\%$ of the money. Nifty and gold must each hold at least 10\% and at
 most 70\% of the whole portfolio. For \Rs1{,}00{,}000 this means \Rs70{,}000 to split, of which each
 must get at least \Rs10{,}000, so the Nifty share of the risky part lies between
 $10{,}000/70{,}000 = 14.29\%$ and $60{,}000/70{,}000 = 85.71\%$.
 
-\subsection{Step 3: equal risk}
+\subsubsection{Step 3: equal risk}
 
 From Eq.~\eqref{eq:rp2}:
 \[
@@ -130,7 +104,7 @@ $RC_N = 0.4850\,(0.4850 \times 0.026541 + 0.5150 \times (-0.0011105)) = 0.005966
 $RC_G = 0.5150\,(0.5150 \times 0.023539 + 0.4850 \times (-0.0011105)) = 0.005966$.
 Both assets contribute equally.
 
-\subsection{Step 4: maximum Sharpe above liquid}
+\subsubsection{Step 4: maximum Sharpe above liquid}
 
 For a Nifty share $w$ of the risky part:
 $m = 6.48\%\,w + 9.97\%\,(1-w)$, \;
@@ -167,7 +141,7 @@ At the best mix, $w = 0.3757$:
 A 38/62 mix swings 11.1\% a year, less than Nifty (16.3\%) or gold (15.3\%) alone: the
 diversification effect of Section~\ref{sec:maxsharpe}.
 
-\subsection{Step 5: the target}
+\subsubsection{Step 5: the target}
 
 \[
   n = \tfrac12 \times 48.50\% + \tfrac12 \times 37.57\% = 43.03\%,
@@ -178,7 +152,7 @@ diversification effect of Section~\ref{sec:maxsharpe}.
   w_{\text{Liquid}} &= 30.00\% .
 \end{align*}
 
-\subsection{Step 6: this month's purchases}
+\subsubsection{Step 6: this month's purchases}
 
 The total after investing is $70{,}000 + 1{,}10{,}000 + 75{,}000 + 10{,}000 = \Rs2{,}65{,}000$.
 
@@ -207,7 +181,7 @@ $4{,}500/14{,}330 \times 10{,}000 = \Rs3{,}140$ to liquid. Afterwards the shares
 and 29.5\%. The largest drift is gold's 1.6 percentage points, below the 5\% band, so nothing is
 sold. These are exactly the figures in Figure~\ref{fig:website}.
 
-\section{Stability of the target}
+\subsection{Stability of the target}
 
 A natural question is how much one unusual month changes the advice. As a test, an extreme month
 was entered for November 2026: Nifty $+1\%$, gold $+20\%$, liquid $+10\%$.
@@ -240,7 +214,7 @@ same way. This stability is deliberate: the rule does not chase short-term spike
 estimation-error literature suggests would be costly. The price is that it adapts slowly to a
 genuine, lasting change.
 
-\section{Verification}
+\subsection{Verification}
 
 \begin{itemize}
   \item An automated test runs \code{sip.js} under Node.js on the same 120-month window as the Python
@@ -252,12 +226,3 @@ genuine, lasting change.
   \item The page was checked at desktop and phone widths and in light and dark themes.
 \end{itemize}
 
-\section{Limitations of the planner}
-
-\begin{itemize}
-  \item The risk level is chosen from three fixed profiles rather than measured by a questionnaire.
-  \item Taxes and exit loads are not considered when recommending a sale.
-  \item The data must be kept current: either the maintainer updates the data file, or the user adds
-        each month's returns on the page.
-  \item The planner is an educational output of a back-test, not investment advice.
-\end{itemize}
