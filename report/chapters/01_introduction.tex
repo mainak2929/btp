@@ -18,14 +18,36 @@ question is \emph{how much} of each month's instalment should go into each.
 
 \subsection{Problem statement}
 
+The problem statement given for this project was:
+
 \begin{quote}
-\emph{Given a fixed monthly investment and the investor's tolerance for risk, how should each
-instalment be split between Nifty~50 equities, gold and a liquid fund, using only the data that
-would have been available at the time?}
+\emph{A Simple Optimized SIP strategy for multi-asset allocation based on back-tested data.}
 \end{quote}
 
-The answer must be usable by an ordinary investor every month, so the study ends not with a table
-of back-test results but with a tool that gives this month's instruction.
+Each part of the statement was translated into a concrete design decision:
+
+\begin{itemize}
+  \item \textbf{SIP:} a fixed amount (\Rs10{,}000) invested every month, so the question is how to
+        split each instalment, not how to invest a lump sum.
+  \item \textbf{Multi-asset:} three assets an Indian investor can easily hold through mutual funds:
+        Nifty~50 equities, gold and a liquid fund.
+  \item \textbf{Optimized:} the split is set by portfolio optimisers (risk parity and maximum
+        Sharpe ratio), and approaches are compared by one score that balances return against risk
+        for a given investor, the mean-variance utility $U$.
+  \item \textbf{Simple:} the final rule has few moving parts (a safety cushion set by the investor's
+        risk level and an average of two optimisers) and produces a short monthly instruction.
+  \item \textbf{Based on back-tested data:} every rule is tested month by month on Indian data from
+        2000 to 2025, using only the data available at each point in time; rules are designed on
+        2010--2019 and judged on 2020--2025, data they never saw.
+\end{itemize}
+
+In short, the project asks: \emph{given a fixed monthly investment and the investor's tolerance for
+risk, how should each instalment be split between Nifty, gold and a liquid fund, using only past
+data?} It answers in four steps: building and verifying the return data (Section~\ref{ch:data});
+back-testing eight strategies (Sections~\ref{ch:method} and~\ref{ch:results}); choosing the final
+rule, the Personal SIP, by its out-of-sample behaviour and its fit to the investor
+(Section~\ref{sec:choice}); and turning that rule into a website that gives this month's purchases
+(Section~\ref{ch:website}).
 
 \subsection{Objectives}
 
