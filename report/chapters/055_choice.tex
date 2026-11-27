@@ -1,0 +1,82 @@
+\section{Choosing the Final Strategy}
+\label{sec:choice}
+
+The comparison in Section~\ref{ch:results} produced no strategy that was best on every measure and in
+every period. The final choice was therefore made against a small set of requirements for a tool that
+an ordinary investor would use every month.
+
+\subsection{Requirements}
+
+\begin{enumerate}
+  \item \textbf{Good balance of return and risk on unseen data.} Judged by the utility $U$ and the
+        worst fall on 2020--2025, not by the period the rule was designed on.
+  \item \textbf{Robust to estimation error.} It should not rely heavily on past average returns,
+        which proved unreliable (Section~\ref{sec:res-utility}).
+  \item \textbf{Personal.} The investor's tolerance for risk should change the advice; otherwise
+        there is no reason to ask for it.
+  \item \textbf{Adaptive but stable.} It should use the latest data, without swinging after one
+        unusual month.
+  \item \textbf{Simple to follow.} A monthly instruction of a few purchases, with selling only when
+        the portfolio has clearly drifted.
+\end{enumerate}
+
+\subsection{Why the other strategies were not chosen}
+
+\begin{table}[H]
+\centering
+\caption{The candidates against the requirements}
+\label{tab:choice}
+\small
+\begin{tabularx}{\textwidth}{@{}l>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}X@{}}
+\toprule
+Strategy & Strength & Why it was not the final choice \\
+\midrule
+1 Equity (100\% Nifty) & Highest return in 2010--2019 & Largest falls ($-23.7\%$, $-28.2\%$); never had the highest $U$ for any investor \\
+2 Equal-weight & Best return per unit of risk out of sample; very simple & Ignores the data and the investor: the same \nicefrac13 split for everyone, always \\
+3 60/20/20 & Best in sample (2010--2019) & Fell to 4th of eight by $U$ out of sample for every profile; a fixed mix that suited one decade \\
+4--6 Optimisers vs 0\% & Tiny falls ($-1.7\%$ to $-3.2\%$) & About 70\% in cash: earned little more than the liquid fund itself \\
+6b Fixed Optimized & Highest $U$ for every profile out of sample (XIRR 20.3\%) & One 10\% cushion for everyone, so a cautious investor still faces a $-12.2\%$ fall \\
+7 Max-Utility & Uses the investor's $\lambda$ directly & Relies on average returns; never ranked first, a clear case of estimation error \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Two lessons shaped the final rule. First, the split between Nifty and gold produced by Strategy 6b
+(half risk parity, half maximum Sharpe measured above the liquid fund) was the strongest performer out
+of sample and the most robust optimiser. Second, the only part of 6b that ignored the investor was the
+fixed 10\% liquid share.
+
+\subsection{The final choice: the Personal SIP}
+
+The Personal SIP keeps everything that worked in Strategy 6b and changes only the part that ignored
+the investor: the liquid share becomes a cushion chosen by $U$ for each risk level. This follows
+Tobin's separation \citep{tobin1958}: how much to keep safe is a personal decision, how to split the
+rest is not.
+
+\begin{table}[H]
+\centering
+\caption{Each design choice of the Personal SIP and the reason for it}
+\label{tab:design-choices}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}p{3.3cm}>{\raggedright\arraybackslash}X@{}}
+\toprule
+Choice & Alternative considered & Reason \\
+\midrule
+Liquid cushion 10/30/70\% by risk level & One cushion for all (6b) & Makes the advice personal; chosen by $U$ on 2010--2019 only \\
+Returns measured above the liquid fund & Above 0\% (Strategies 4--6) & Against 0\% the optimisers simply hold cash \\
+Average of risk parity and max Sharpe & Max Sharpe or max utility alone & Risk parity needs no average returns, so it offsets the estimation error of max Sharpe \\
+Nifty and gold each 10--70\% & No limits & Prevents an all-in bet on one asset from noisy estimates \\
+120-month window, re-fitted monthly & Yearly re-fit & Same performance, and each month's plan uses the latest data \\
+Fill gaps first, reset only beyond 5\% & Pro-rata buying; calendar resets & Fewer sales and costs while staying close to target \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{What the choice costs.} On 2020--2025 the Personal SIP's $U$ was close to Strategy 6b's
+for the aggressive investor (9.99\% against 10.25\%), whose cushion is the same 10\%, but lower for
+the moderate and conservative investors (Table~\ref{tab:personal}), because their larger cushions
+missed part of the gold boom. In return, the conservative investor's worst fall was $-3.4\%$ instead
+of $-12.2\%$. The rule therefore does what a cautious investor asks of it: it gives up some return in
+strong markets for much smaller losses. Since no rule won in every period, a rule that matches the
+investor's own tolerance for risk was preferred to the one that happened to score highest in a single
+six-year test.
